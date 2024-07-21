@@ -18,10 +18,15 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => UdpServices()),
+        ChangeNotifierProvider(
+          create: (_) {
+            final myServices = UdpServices();
+            myServices.startMyServices();
+            return myServices;
+          },
+        ),
       ],
-      child: 
-      const MyApp(),
+      child: const MyApp(),
     ),
   );
 }

@@ -1,3 +1,5 @@
+import 'package:cat_ship/data/bro_data.dart';
+import 'package:cat_ship/data/color_lib.dart';
 import 'package:cat_ship/data/udp_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -136,15 +138,24 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           if (udpServices.broGroup.bros.isEmpty) {
             return const Center(child: Text('no bros found - are you alone?'));
           }
-          return ListView.builder(
-            itemCount: udpServices.broGroup.bros.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(udpServices.broGroup.bros[index].getName(20)),
-                subtitle: Text(udpServices.broGroup.bros[index].ipAdress),
-              );
-            },
-          );
+          return Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: ListView.builder(
+                itemCount: udpServices.broGroup.bros.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: 
+                    ClipOval(
+                          child: Image.asset(
+                            PngLib.getPngByName(udpServices.broGroup.bros[index].pic).path,                   
+                            width: 30,
+                          )),
+                    title: Text(udpServices.broGroup.bros[index].getName(20)),
+                    subtitle: Text(udpServices.broGroup.bros[index].ipAdress),
+                    tileColor: udpServices.broGroup.bros[index].getOnlineColor(),
+                  );
+                },
+              ));
         },
       )),
     );

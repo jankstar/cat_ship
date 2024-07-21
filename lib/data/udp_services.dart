@@ -123,7 +123,8 @@ class UdpServices with ChangeNotifier {
             if (broGroup.bros[i].isOnline()) {
               ///bro has not pinged me in timerInterval * 2 seconds
               stdout.write('bro ${broGroup.bros[i].name} has not pinged me in ${timerInterval * 2} seconds\n');
-              broGroup.bros[i].setOffline();
+              broGroup.bros.removeAt(i);
+              //broGroup.bros[i].setOffline();
               notifyListeners();
             }
           }
@@ -281,9 +282,11 @@ class UdpServices with ChangeNotifier {
             if (broGroup.bros[lBroIndex].myStatus != Status.online) {
               await broGroup.broIsOnline(broGroup.bros[lBroIndex]);
               //setState(() {});
+              notifyListeners();
             } else {
               await broGroup.broIsOnline(broGroup.bros[lBroIndex]);
               //setState(() {});
+              notifyListeners();
             }
           } else {
             //this bro is unknown - push it in broGroup
@@ -293,6 +296,7 @@ class UdpServices with ChangeNotifier {
             broGroup.addBro(lBro);
             await broGroup.broIsOnline(lBro);
             //setState(() {});
+            notifyListeners();
             pingMe(ipAdress: ipAdress);
           }
         }
@@ -309,6 +313,7 @@ class UdpServices with ChangeNotifier {
           //myMessageList.insert(0, lMessage);
           if (broGroup.bros[lBroIndex].isOnline() != true) {
             await broGroup.broIsOnline(broGroup.bros[lBroIndex]);
+            notifyListeners();
           }
 
           //if (myAppLifecycleState != AppLifecycleState.resumed && //
