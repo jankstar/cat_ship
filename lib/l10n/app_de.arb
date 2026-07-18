@@ -1,0 +1,7 @@
+{
+    "@@locale": "de",
+    "helloWorld": "Hello World!",
+    "german": "Deutsch",
+    "english": "Englisch",
+    "enterName": "Eingabe Name:"
+}

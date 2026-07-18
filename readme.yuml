@@ -1,0 +1,36 @@
+// {type:state}
+// {generate:true}
+
+(start)[Start] -> (idle)
+(idle)[StartRequestRec] -> (idle)
+(idle)[StartRequestSend] -> (startRequestAndWait)
+(idle)[goInSend] -> (buildMyDeskAndWait)
+
+(startRequestAndWait)[goInRec] -> (buildMyDeskAndWait)
+(startRequestAndWait)[acceptTimeout] -> (idle)
+(startRequestAndWait)[exitSend] -> (idle)
+
+(buildMyDeskAndWait)[deskReadySend] -> (waitRemoteDesk)
+(buildMyDeskAndWait)[deskReadyRec] -> (buildMyDesk)
+(buildMyDeskAndWait)[exitSend] -> (idle)
+(buildMyDeskAndWait)[exitRec] -> (idle)
+
+(buildMyDesk)[deskReadySend] -> (inGame)
+(buildMyDesk)[exitSend] -> (idle)
+
+(waitRemoteDesk)[deskReadyRec] -> (inGame)
+(waitRemoteDesk)[exitRec] -> (idle)
+
+// starter is picked by whichever side has the lexicographically smaller
+// public key (amIStarterPicker()), so both devices agree without a handshake;
+// the picker flips a coin and sends starterPick, the other side just applies it
+(inGame)[handleTrue] -> (inGameMyStep)
+(inGame)[handleFalse] -> (inGameRemoteStep)
+
+(inGameMyStep)[shotSend] -> (inGameRemoteStep)
+(inGameRemoteStep)[shotRec] -> (inGameMyStep)
+(inGameRemoteStep)[shotRec-allMineSunk] -> (inGameFinish)
+(inGameRemoteStep)[shotResultRec-allTheirsSunk] -> (inGameFinish)
+
+(inGameFinish)[exitSend] -> (idle)
+(inGameFinish)[exitRec] -> (idle)
